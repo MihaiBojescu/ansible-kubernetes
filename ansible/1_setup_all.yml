@@ -83,10 +83,10 @@
       become: true
       become_method: sudo
 
-    - name: Setup SystemD dependencies
+    - name: Restart SystemD service for ContainerD
       ansible.builtin.systemd_service:
         name: containerd.service
-        state: started
+        state: restarted
         enabled: true
       become: true
       become_method: sudo
@@ -94,14 +94,14 @@
     - name: Setup Kubelet node IP
       ansible.builtin.shell:
         cmd: |
-          local_ip="$(ip --json addr show enp1s0 | jq -r '.[0].addr_info[] | select(.family == "inet") | .local')"
+          LOCAL_IP="$(ip --json addr show enp1s0 | jq -r '.[0].addr_info[] | select(.family == "inet") | .local')"
 
-          if [ -n "$(cat /etc/default/kubelet | grep "KUBELET_EXTRA_ARGS=--node-ip=$local_ip")" ]; then
+          if [ -n "$(cat /etc/default/kubelet | grep "KUBELET_EXTRA_ARGS=--node-ip=$LOCAL_IP")" ]; then
             exit 0
           fi
           
           cat << EOF | tee /etc/default/kubelet 
-          KUBELET_EXTRA_ARGS=--node-ip=$local_ip
+          KUBELET_EXTRA_ARGS=--node-ip=$LOCAL_IP
           EOF
       become: true
       become_method: sudo
