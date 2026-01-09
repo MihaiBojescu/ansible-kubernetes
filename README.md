@@ -8,6 +8,7 @@ This repository hosts a way to setup Kubernetes on Debian 13 machines.
   - [Table of contents](#table-of-contents)
   - [Prerequisites](#prerequisites)
   - [Usage](#usage)
+  - [References](#references)
 
 ## Prerequisites
 
@@ -32,3 +33,16 @@ Follow these steps:
    1. Run `$ ansible-playbook -i hosts 1_setup_all.yml -kK`
    1. Run `$ ansible-playbook -i hosts 2_setup_masters.yml -kK`
    1. Run `$ ansible-playbook -i hosts 2_setup_workers.yml -kK`
+
+## References
+
+- [Ansible modules: apt](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/apt_module.html)
+- [Ansible modules: apt_repository](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/apt_repository_module.html#ansible-collections-ansible-builtin-apt-repository-module)
+- [Ansible modules: get_url](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/get_url_module.html#ansible-collections-ansible-builtin-get-url-module)
+- [Ansible modules: set_facts](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/set_fact_module.html)
+- [Ansible modules: shell](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/shell_module.html#ansible-collections-ansible-builtin-shell-module)
+- [Ansible modules: systemd_service](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/systemd_service_module.html#ansible-collections-ansible-builtin-systemd-service-module)
+- [Kubernetes: Kubeadm setup](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+- [Kubernetes: Container runtimes](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#cgroup-drivers)
+- [Kubernetes: Containerd + Systemd setup](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd-systemd)
+- 

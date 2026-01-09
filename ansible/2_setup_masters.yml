@@ -37,7 +37,7 @@
       ansible.builtin.shell:
         cmd: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
-    # BUG: Calico expects files to be in `/usr/lib/cni`, but they are in `/opt/cni/bin`
+      # NOTE: Calico expects files to be in `/usr/lib/cni`, but they are in `/opt/cni/bin`
     - name: Link Calico CNI
       ansible.builtin.shell:
         cmd: |
@@ -58,7 +58,7 @@
       become: true
       become_method: sudo
 
-    - name: Store join command
+    - name: Store Kubeadm join command
       ansible.builtin.set_fact:
         kubeadm_join_command: "{{ kubeadm_join.stdout }}"
         cacheable: true
