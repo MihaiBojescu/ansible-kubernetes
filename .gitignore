@@ -1,3 +1,4 @@
+.kube/
 keys/
 .ansible_facts
 hosts
