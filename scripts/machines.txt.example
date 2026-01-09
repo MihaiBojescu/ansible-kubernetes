@@ -1,0 +1,3 @@
+192.168.x.a master.local
+192.168.x.b worker-1.local
+192.168.x.c worker-2.local

@@ -1,0 +1,11 @@
+---
+- name: Setup Kubernetes master
+  hosts: workers
+  remote_user: debian
+
+  tasks:
+    - name: Join cluster
+      ansible.builtin.shell:
+        cmd: "{{ hostvars[groups['masters'][0]].ansible_facts['kubeadm_join_command'] }}"
+      become: true
+      become_method: sudo

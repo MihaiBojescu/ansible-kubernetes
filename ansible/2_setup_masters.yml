@@ -1,0 +1,65 @@
+---
+- name: Setup Kubernetes master
+  hosts: masters
+  remote_user: debian
+
+  tasks:
+    - name: Pull images
+      ansible.builtin.shell:
+        cmd: kubeadm config images pull
+        creates: /home/debian/.kube
+      become: true
+      become_method: sudo
+
+    - name: Init cluster
+      ansible.builtin.shell:
+        cmd: |
+          POD_CIDR="192.168.254.0/16"
+          NODENAME=$(hostname -s)
+          MASTER_PRIVATE_IP=$(ip addr show enp1s0 | awk '/inet / {print $2}' | cut -d/ -f1)
+
+          sudo kubeadm init --apiserver-advertise-address="$MASTER_PRIVATE_IP" --apiserver-cert-extra-sans="$MASTER_PRIVATE_IP" --pod-network-cidr="$POD_CIDR" --node-name "$NODENAME" --ignore-preflight-errors Swap
+        creates: /home/debian/.kube
+      become: true
+      become_method: sudo
+
+    - name: Setup cluster configs
+      ansible.builtin.shell:
+        cmd: |
+          mkdir -p /home/debian/.kube
+          cp -i /etc/kubernetes/admin.conf /home/debian/.kube/config
+          chown -R debian:debian /home/debian/.kube
+        creates: /home/debian/.kube
+      become: true
+      become_method: sudo
+
+    - name: Add Calico CNI
+      ansible.builtin.shell:
+        cmd: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+    # BUG: Calico expects files to be in `/usr/lib/cni`, but they are in `/opt/cni/bin`
+    - name: Link Calico CNI
+      ansible.builtin.shell:
+        cmd: |
+          if [ -n "$(file /usr/lib/cni/calico)" ]; then
+            exit 0
+          fi
+
+          mkdir -p /usr/lib/cni
+          ln -s /opt/cni/bin/* /usr/lib/cni/
+      become: true
+      become_method: sudo
+        
+    - name: Generate Kubeadm join command
+      ansible.builtin.shell:
+        cmd: kubeadm token create --print-join-command
+      register: kubeadm_join
+      run_once: true
+      become: true
+      become_method: sudo
+
+    - name: Store join command
+      ansible.builtin.set_fact:
+        kubeadm_join_command: "{{ kubeadm_join.stdout }}"
+        cacheable: true
+      run_once: true

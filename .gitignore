@@ -1,0 +1,4 @@
+keys/
+.ansible_facts
+hosts
+machines.txt
