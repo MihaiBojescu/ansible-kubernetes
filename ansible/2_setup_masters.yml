@@ -41,7 +41,7 @@
     - name: Link Calico CNI
       ansible.builtin.shell:
         cmd: |
-          if [ -e /usr/lib/cni/calico ]; then
+          if [ -f /usr/lib/cni/calico ]; then
             exit 0
           fi
 
