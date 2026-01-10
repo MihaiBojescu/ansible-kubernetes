@@ -32,7 +32,7 @@ Follow these steps:
 3. Run the Ansible playbooks from the [`/ansible`](/ansible) folder:
    1. Run `$ ansible-playbook -i hosts 1_setup_all.yml -kK`
    1. Run `$ ansible-playbook -i hosts 2_setup_masters.yml -kK`
-   1. Run `$ ansible-playbook -i hosts 2_setup_workers.yml -kK`
+   1. Run `$ ansible-playbook -i hosts 3_setup_workers.yml -kK`
 
 ## References
 
